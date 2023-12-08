@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { tracks } from '../../assets/data/tracks';
+import { usePlayerContext } from '../providers/PlayerProvider';
 const track = tracks[0];
 
 const Player = () => {
+  const {track} = usePlayerContext();
   if (!track) {
     return null;
   }
