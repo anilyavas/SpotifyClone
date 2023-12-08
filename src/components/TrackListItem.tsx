@@ -1,4 +1,4 @@
-import {View,Text,Image,StyleSheet,Pressable} from "react-native";
+import {View,Text,Image,StyleSheet} from "react-native";
 import { Track } from "../types";
 
 type TrackListItemProps = {
