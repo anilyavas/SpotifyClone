@@ -2,46 +2,45 @@ import {View,Text,Image,StyleSheet,Pressable} from "react-native";
 import { Track } from "../types";
 
 type TrackListItemProps = {
-    track: Track;
+    track: Track
 }
-const TrackListItem = ({track}: TrackListItemProps) => {
-    const image = track.album?.images?.[0];
+
+export default function TrackListItem({track}: TrackListItemProps) {
     return (
-        <Pressable
-          onPress={() => console.log('Playing track: ', track.id)}
-          style={styles.container}
-        >
-          {image && <Image source={{ uri: image.url }} style={styles.image} />}
-          <View>
+        <View style={styles.container}>
+                <Image  style={styles.image} source={{uri: track.album.images[0]?.url}} />
+                <View>
             <Text style={styles.title}>{track.name}</Text>
             <Text style={styles.subtitle}>{track.artists[0]?.name}</Text>
-          </View>
-        </Pressable>
-      );
-    };
+            </View>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        marginVertical: 5,
+        padding: 5,
+        flexDirection: "row",
+        alignItems: "center",
+        width: "100%",
+    },
     
-    const styles = StyleSheet.create({
-      container: {
-        width: '100%',
-        padding: 10,
-        gap: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-      },
-      title: {
-        fontWeight: '500',
-        color: 'white',
+    title: {
+        color: "white",
+        fontWeight: "500",
         fontSize: 16,
-      },
-      subtitle: {
-        color: 'gray',
-      },
-      image: {
+
+    },
+    subtitle: {
+        color: "grey",
+    },
+    image: {
         width: 50,
-        aspectRatio: 1,
-        marginRight: 10,
+        height: 50,
         borderRadius: 5,
-      },
-    });
-    
-    export default TrackListItem;
+        marginRight: 10,
+    }
+})
+
+
