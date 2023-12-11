@@ -30,3 +30,12 @@ stepzen import \
         --query-type "SearchResult" \
         --name "search" \
         --prefix "Search"
+
+        stepzen import \
+        curl "https://api.spotify.com/v1/tracks/11dFghVXANMlKmJXsNCbNl" \
+        --header "Authorization: Bearer BQCq6KLL7w7wWGRXKzFDIv0DlZlOLwmcGPUAxtiClzX7G6FsnaUCVer-39ac4hfnpNNxboGimGgfq7TVkMqOxS9nL5FbUEdbIRxmAzfJw5NnbJG62OM" \
+        --path-params "/v1/tracks/\$trackId"  \
+        --query-name "getTrack" \
+        --query-type "TrackResponse" \
+        --name "track" \
+        --prefix "Track"
