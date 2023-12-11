@@ -1,0 +1,24 @@
+curl -X POST "https://accounts.spotify.com/api/token" \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "grant_type=client_credentials&client_id=e025727d126447b98b8482ec1a6ce7e8&client_secret=1e3784cee17845c4ba4fb567d5da8d5d"
+
+Access Token: BQDkdEimyfmunxF1BAN4uAJyUz6gMQgbW2-HTCRnqPsUXBYSd_yUI8UuF7FwtjuTphMIcXyAVYGbFeyAhGeovUrLPskNBSSlpBGZMMUWjS-iJxoqMUI
+
+curl "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb" \
+     -H "Authorization: Bearer BQDkdEimyfmunxF1BAN4uAJyUz6gMQgbW2-HTCRnqPsUXBYSd_yUI8UuF7FwtjuTphMIcXyAVYGbFeyAhGeovUrLPskNBSSlpBGZMMUWjS-iJxoqMUI"
+
+stepzen import \
+        curl "https://api.spotify.com/v1/recommendations?seed_genres=pop" \
+        --header "Authorization: Bearer BQDkdEimyfmunxF1BAN4uAJyUz6gMQgbW2-HTCRnqPsUXBYSd_yUI8UuF7FwtjuTphMIcXyAVYGbFeyAhGeovUrLPskNBSSlpBGZMMUWjS-iJxoqMUI" \
+        --query-name "recommendations" \
+        --query-type "Recommendation" \
+        --name "recommendations" \
+        --prefix "Recommend"
+
+stepzen import \
+        curl -X POST "https://accounts.spotify.com/api/token" \
+        --header "Content-Type: application/x-www-form-urlencoded" \
+        --data "grant_type=client_credentials&client_id=e025727d126447b98b8482ec1a6ce7e8&client_secret=1e3784cee17845c4ba4fb567d5da8d5d" \
+        --query-name "getToken" \
+        --query-type "TokenResponse" \
+        --name "auth"
