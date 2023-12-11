@@ -22,3 +22,11 @@ stepzen import \
         --query-name "getToken" \
         --query-type "TokenResponse" \
         --name "auth"
+
+        stepzen import \
+        curl 'https://api.spotify.com/v1/search?q=nf&type=track' \
+        --header "Authorization: Bearer BQAkL6oo5cKc-03LVhkMC6TsAP0ffxJKvYrlg6ewD7lxrQiqQWxFf0AsWdkYcTux218Xp1nk-j2S8_otUvuFLbijEbU4ViVULAaB98vWhqwHeTDn3PY" \
+        --query-name "search" \
+        --query-type "SearchResult" \
+        --name "search" \
+        --prefix "Search"
