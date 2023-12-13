@@ -1,21 +1,52 @@
-import { StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList } from 'react-native';
+import TrackListItem from '../../components/TrackListItem';
+import { gql,useQuery } from '@apollo/client';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
-
+const query = gql`
+query getToken ($userId:String!){
+  favoritesByUserid(userid: $userId) {
+    id
+    trackid
+    userid
+    track {
+       id
+      name
+      preview_url
+      artists {
+        id
+        name
+      }
+      album {
+        id
+        name
+        images {
+          url
+          width
+          height
+        }
+      }
+    }
+  }
+}
+`;
 export default function FavoritesScreen() {
+  const {data,loading,error} = useQuery(query, {
+    variables: {userId: 'anil'}
+  });
+
+  if(!loading){
+    return <ActivityIndicator />;
+  }
+  
+
+  const tracks = (data?.favoritesByUserid || []).map((fav) => fav.track);
+
   return (
-    <View style={styles.container}>
-      
-    </View>
+    <FlatList 
+    data={tracks} 
+    renderItem={({item}) => <TrackListItem track={item}/> } 
+    showsVerticalScrollIndicator={false}/>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  
-});
+

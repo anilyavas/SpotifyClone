@@ -1,17 +1,48 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { tracks } from '../../assets/data/tracks';
 import { usePlayerContext } from '../providers/PlayerProvider';
 import { useEffect, useState } from 'react';
 import {AVPlaybackStatus, Audio} from "expo-av";
 import { Sound } from 'expo-av/build/Audio';
+import { gql,useMutation,useQuery } from '@apollo/client';
 
-const track = tracks[0];
-
+const insertFavoriteMutation = gql`
+mutation MyMutation ($userId: String!, $trackId: String!){
+  insertFavorites(trackid: $trackId, userid: $userId) {
+    id
+    trackid
+    userid
+  }
+}
+`;
+const isFavoriteQuery = gql`
+query MyQuery($trackId: String!, $userId:String!) {
+  favoritesByTrackidAndUserid(trackid: $trackId, userid: $userId) {
+    userid
+    trackid
+    id
+  }
+}
+`;
+const removeFavoriteMutation = gql`
+mutation MyMutation ($trackId:String!, $userId:String!){
+  deleteFavorites(trackid: $trackId, userid: $userId) {
+    id
+  }
+}
+`;
 const Player = () => {
   const [sound,setSound] = useState<Sound>();
   const [isPlaying, setIsPlaying] = useState(false);
   const {track} = usePlayerContext();
+
+  const [insertFavorite] = useMutation(insertFavoriteMutation);
+  const [removeFavorite] = useMutation(removeFavoriteMutation);
+  const {data,refetch} = useQuery(isFavoriteQuery, {
+    variables: {userId: "anil", trackId: track?.id || ""}
+  });
+
+  const isLiked = data?.favoritesByTrackidAndUserid?.lenght > 0;
 
   useEffect(() => {
     if(track){
@@ -71,6 +102,15 @@ const Player = () => {
   }
 
   const image = track.album.images?.[0];
+  const onLike = async() => {
+    if(!track) return ;
+    if(isLiked){
+      await removeFavorite({variables: {userId: 'anil', trackId: track?.id},})
+    }else{
+    await insertFavorite({variables: {userId: 'anil', trackId: track?.id},});
+    }
+    refetch();
+  };
 
   return (
     <View style={styles.container}>
@@ -83,7 +123,8 @@ const Player = () => {
         </View>
 
         <Ionicons
-          name={'heart-outline'}
+          onPress={onLike}
+          name={isLiked ? 'heart' : 'heart-outline'}
           size={20}
           color={'white'}
           style={{ marginHorizontal: 10 }}
