@@ -6,8 +6,8 @@ import { gql, useQuery } from '@apollo/client';
 
 
 const query = gql`
-query MyQuery {
-  search(q: "NF") {
+query MyQuery($q : String!) {
+  search(q: "q") {
     tracks {
       items {
         id
@@ -55,7 +55,7 @@ const tracks = data?.search?.tracks?.items || [];
 
       {loading && <ActivityIndicator />}
       {error && <Text>Failed to fetch tracks</Text>}
-      
+
      <FlatList 
      data={tracks} 
      renderItem={({item}) => <TrackListItem 
