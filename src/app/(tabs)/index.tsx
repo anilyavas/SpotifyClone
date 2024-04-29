@@ -1,39 +1,43 @@
-import { ActivityIndicator, FlatList,Text } from 'react-native';
+import { ActivityIndicator, FlatList, Text } from 'react-native';
 import TrackListItem from '../../components/TrackListItem';
-import { gql,useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 
 const query = gql`
-query MyQuery ($genres:String!){
-  recommendations(seed_genres: $genres) {
-    tracks {
-      id
-      name
-      preview_url
-      artists {
+  query MyQuery($genres: String!) {
+    recommendations(seed_genres: $genres) {
+      tracks {
         id
         name
-      }
-      album {
-        id
-        name
-        images {
-          width
-          url
-          height
+        preview_url
+        artists {
+          id
+          name
+        }
+        album {
+          id
+          name
+          images {
+            width
+            url
+            height
+          }
         }
       }
     }
   }
-}
 `;
 export default function HomeScreen() {
-  const {data,loading,error} = useQuery(query, {variables: {genres: "drum-and-bass"}});
+  const { data, loading, error } = useQuery(query, {
+    variables: { genres: 'drum-and-bass' },
+  });
 
-  if(loading){
+  if (loading) {
     return <ActivityIndicator />;
   }
-  if(error){
-    return <Text style={{color: "white"}}>Failed to fetch recommendations</Text>
+  if (error) {
+    return (
+      <Text style={{ color: 'white' }}>Failed to fetch recommendations</Text>
+    );
   }
 
   const tracks = data?.recommendations?.tracks || [];
